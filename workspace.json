@@ -52,6 +52,28 @@
         }
       }
     },
+    "api-types": {
+      "root": "libs/api-types",
+      "sourceRoot": "libs/api-types/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/api-types/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api-types"],
+          "options": {
+            "jestConfig": "libs/api-types/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "nx-example": {
       "root": "apps/nx-example",
       "sourceRoot": "apps/nx-example/src",

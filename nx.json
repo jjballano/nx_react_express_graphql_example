@@ -30,6 +30,9 @@
     "api": {
       "tags": []
     },
+    "api-types": {
+      "tags": []
+    },
     "nx-example": {
       "tags": []
     },
