@@ -1,14 +1,10 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
 import express from 'express';
+import { list } from '@jjballano/data/employee'
 
 const app = express();
 
-app.get('/api', (req, res) => {
-  res.send({ message: 'Welcome to api!' });
+app.get('/employees', async (req, res) => {
+  res.send({employees: await list()});
 });
 
 const port = process.env.port || 3333;
