@@ -3,6 +3,7 @@ import { list, get } from '@jjballano/data/employee'
 
 const app = express();
 
+//Routes could go to its own file, but in this case there will be only a few of them, so I'll leave them here
 app.get('/employees/:id', async (req, res) => {
   res.send(await get(req.params.id));
 });
