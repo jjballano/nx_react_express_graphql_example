@@ -18,7 +18,7 @@ export const list = async (): Promise<Employee[]> => {
     const rows: Employee[] = [];
     fs.createReadStream(path.resolve(__dirname, 'data.txt'))
     .pipe(csvReader.parse({ headers: headers => headers.map(h => h?.trim()) }))
-    .on('error', (error) => console.error(error))
+    .on('error', (error) => reject(error))
     .on('data', (row: Employee) => {
       const newRow = {...row, birthdate: transformDate(row.birthdate)};
       rows.push(newRow);
@@ -28,6 +28,21 @@ export const list = async (): Promise<Employee[]> => {
         reject('Error parsing data');
       }
       resolve(rows);
+    });
+  })
+} 
+
+
+export const get = async (id: string): Promise<Employee> => {
+
+  return new Promise((resolve, reject) => {
+    fs.createReadStream(path.resolve(__dirname, 'data.txt'))
+    .pipe(csvReader.parse({ headers: headers => headers.map(h => h?.trim()) }))
+    .on('error', (error) => reject(error))
+    .on('data', (row: Employee) => {
+      if (row.id === id){
+        resolve({...row, birthdate: transformDate(row.birthdate)});
+      }
     });
   })
 } 

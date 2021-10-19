@@ -1,7 +1,11 @@
 import express from 'express';
-import { list } from '@jjballano/data/employee'
+import { list, get } from '@jjballano/data/employee'
 
 const app = express();
+
+app.get('/employees/:id', async (req, res) => {
+  res.send(await get(req.params.id));
+});
 
 app.get('/employees', async (req, res) => {
   res.send({employees: await list()});
