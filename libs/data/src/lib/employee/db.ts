@@ -46,16 +46,23 @@ export type Employee = {
   birthdate: string;
 }
 
-const employees = (offset: number, limit: number): Promise<Employee[]> => {
-  const list = data.split('\n').splice(1)
-  const max = limit > 0 ? limit : list.length + 1
+const employees = (offset: number, limit: number, sortBy = 'id'): Promise<Employee[]> => {
+  console.log({sortBy, limit})
+  const list = data.split('\n').splice(1);
+  const max = limit > 0 ? limit : list.length + 1;
+  
   return Promise.resolve(
-    list.slice(offset, max + offset).map((row) => {
+    list.map((row) => {
       const [id, name, surname, address, phone, email, birthdate] = row.split(',');
       return {
         id, name, surname, address: address.replace('"', ''), phone, email, birthdate: transformDateFromRawData(birthdate)
       } as Employee
-    })
+    }).sort((a, b) => {
+      if (sortBy === 'id'){
+        return parseInt(a.id) - parseInt(b.id);
+      }
+      return a[sortBy].localeCompare(b[sortBy])
+    }).slice(offset, max + offset)
   )
 } 
 

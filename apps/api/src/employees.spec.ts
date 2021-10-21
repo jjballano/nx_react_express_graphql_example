@@ -38,8 +38,21 @@ describe('Employees API', () => {
       `
     })).data.list;
     
-    expect(employees).toHaveLength(5);
     expect(employees.map(e => e.id)).toEqual(['11', '12', '13', '14', '15']);
+  });
+
+  it('returns the list of employees sorted by params received', async () => {
+    const employees = (await server.executeOperation({
+      query: gql`
+        query Employees {
+          list(sortBy: "name", offset: 0, limit: 3) {
+            name
+          }
+        }
+      `
+    })).data.list;
+    
+    expect(employees.map(e => e.name)).toEqual(['Betty', 'Brenda', 'Cecilia']);
   });
 
   it('returns an employee by id', async () => {
@@ -80,7 +93,7 @@ describe('Employees API', () => {
     const employees = (await server.executeOperation({
       query: gql`
         query Employees {
-          list {
+          list(offset: 30, limit: 1) {
             name
             surname
           }
@@ -88,9 +101,7 @@ describe('Employees API', () => {
       `
     })).data.list as unknown[];
     
-    expect(employees).toHaveLength(31);
-
-    expect(employees[employees.length - 1]).toEqual({
+    expect(employees[0]).toEqual({
       name: "Carlos",
       surname: "García"
     })

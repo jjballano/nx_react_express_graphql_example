@@ -11,9 +11,9 @@ type Employee = {
   birthdate: string;
 }
 
-const list = async (_, {offset, limit}: {offset: number, limit: number}): Promise<Employee[]> => {
+const list = async (_, {offset, limit, sortBy}: {offset: number, limit: number, sortBy: string}): Promise<Employee[]> => {
   //In the "real world", this would be a repository with some "select xxx from employees";
-  return employees(offset, limit);
+  return employees(offset, limit, sortBy);
 }
 
 const get = async (_, {id}: {id: string}): Promise<Employee> => {
@@ -41,7 +41,7 @@ export const typeDefs = gql`
   }
 
   type Query {
-    list(offset: Int = 0, limit: Int = -1): [Employee]
+    list(offset: Int = 0, limit: Int = -1, sortBy: String = "id"): [Employee]
     find(id: String): Employee
   }
 
