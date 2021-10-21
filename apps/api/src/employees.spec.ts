@@ -27,6 +27,21 @@ describe('Employees API', () => {
     });
   });
 
+  it('returns the list of employees paginated', async () => {
+    const employees = (await server.executeOperation({
+      query: gql`
+        query Employees {
+          list(offset: 10, limit: 5) {
+            id
+          }
+        }
+      `
+    })).data.list;
+    
+    expect(employees).toHaveLength(5);
+    expect(employees.map(e => e.id)).toEqual(['11', '12', '13', '14', '15']);
+  });
+
   it('returns an employee by id', async () => {
     const employee = (await server.executeOperation({
       query: gql`

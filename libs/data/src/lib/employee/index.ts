@@ -11,14 +11,14 @@ type Employee = {
   birthdate: string;
 }
 
-const list = async (): Promise<Employee[]> => {
+const list = async (_, {offset, limit}: {offset: number, limit: number}): Promise<Employee[]> => {
   //In the "real world", this would be a repository with some "select xxx from employees";
-  return employees();
+  return employees(offset, limit);
 }
 
 const get = async (_, {id}: {id: string}): Promise<Employee> => {
   //In the "real world", this would be a repository with some "select xxx from employees where id = $1";
-  return employees().then((list) => {
+  return employees(0, -1).then((list) => {
     return list.find(e => e.id === id);
   })
 } 
@@ -41,7 +41,7 @@ export const typeDefs = gql`
   }
 
   type Query {
-    list: [Employee]
+    list(offset: Int = 0, limit: Int = -1): [Employee]
     find(id: String): Employee
   }
 

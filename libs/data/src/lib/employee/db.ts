@@ -46,9 +46,11 @@ export type Employee = {
   birthdate: string;
 }
 
-const employees = (): Promise<Employee[]> => {
+const employees = (offset: number, limit: number): Promise<Employee[]> => {
+  const list = data.split('\n').splice(1)
+  const max = limit > 0 ? limit : list.length + 1
   return Promise.resolve(
-    data.split('\n').splice(1).map((row) => {
+    list.slice(offset, max + offset).map((row) => {
       const [id, name, surname, address, phone, email, birthdate] = row.split(',');
       return {
         id, name, surname, address: address.replace('"', ''), phone, email, birthdate: transformDateFromRawData(birthdate)
@@ -70,7 +72,7 @@ const transformDateToRawData = (date: string): string => {
 }
 
 const add = async (employee: Omit<Employee, 'id'>): Promise<string> => {
-  const newEmployee = {...employee, id: (await employees()).length + 1};
+  const newEmployee = {...employee, id: (await employees(0, -1)).length + 1};
   const newValue = `${newEmployee.id},${newEmployee.name},${newEmployee.surname},"${newEmployee.address}",${newEmployee.phone},${newEmployee.email},${transformDateToRawData(newEmployee.birthdate)}`
   data += `\n${newValue}`;
   return Promise.resolve(newEmployee.id?.toString());
