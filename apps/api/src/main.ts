@@ -10,7 +10,7 @@ server.start().then(() => {
   server.applyMiddleware({ app });
   const port = process.env.port || 3333;
   app.listen(port, () => {
-    console.log(`Listening at http://localhost:${port}${server.graphqlPath}`);
+   // console.log(`Listening at http://localhost:${port}${server.graphqlPath}`);
   });
 })
 

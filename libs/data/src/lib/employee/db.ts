@@ -2,9 +2,7 @@
 //In the "real world", this would be a real database.
 //In case of there were not database but a csv file instead, I could take the time to store the csv file in a place where it could be accessed from here.
 
-import * as csvReader from 'fast-csv';
-
-const data = `id, name, surname, address, phone, email, birthdate
+const initData = `id, name, surname, address, phone, email, birthdate
 1,Della,Cox,"4945 Lucky Duck Drive",412-862-8457,DellaDCox@superrito.com,10/12/1985
 2,Walter,Jeske,"495 Rafe Lane",662-729-8758,WalterJJeske@armyspy.com,3/15/1951
 3,Ron,Plaza,"4738 Woodside Circle",850-868-3521,RonAPlaza@dayrep.com,3/30/1990
@@ -34,8 +32,9 @@ const data = `id, name, surname, address, phone, email, birthdate
 27,Nancy,Villarreal,"4347 Todds Lane",210-465-6307,NancyNVillarreal@armyspy.com,9/21/1959
 28,Colby,Lincoln,"426 Bryan Street",336-284-1978,ColbyVLincoln@superrito.com,4/8/1996
 29,Robert,Retzlaff,"1858 Water Street",925-250-0317,RobertKRetzlaff@superrito.com,6/20/1951
-30,Donald,Schmidt,"1925 Mattson Street",503-431-9711,DonaldBSchmidt@rhyta.com,11/27/1952
-`
+30,Donald,Schmidt,"1925 Mattson Street",503-431-9711,DonaldBSchmidt@rhyta.com,11/27/1952`
+
+let data = initData;
 
 export type Employee = {
   id: string;
@@ -46,27 +45,40 @@ export type Employee = {
   email: string;
   birthdate: string;
 }
-const employees = new Promise<Employee[]>((resolve, reject) => {
-  const rows: Employee[] = [];
-  csvReader.parseString(data, { headers: headers => headers.map(h => h?.trim()) })
-  .on('error', (e) => reject(e))
-  .on('data', (row: Employee) => {
-    console.log("+++++", row.id)
 
-    rows.push({...row, birthdate: transformDate(row.birthdate)});
-  })
-  .on('end', (rowCount: number) => {
-    if (rows.length !== rowCount){
-      reject('Error parsing data');
-    }
-    resolve(rows);
-  });
-});
+const employees = (): Promise<Employee[]> => {
+  return Promise.resolve(
+    data.split('\n').splice(1).map((row) => {
+      const [id, name, surname, address, phone, email, birthdate] = row.split(',');
+      return {
+        id, name, surname, address: address.replace('"', ''), phone, email, birthdate: transformDateFromRawData(birthdate)
+      } as Employee
+    })
+  )
+} 
 
-const transformDate = (date: string): string => {
+const transformDateFromRawData = (date: string): string => {
   //Not the best way to do it but the faster I can implement now
   const [month, day, year] = date.split('/');
   return `${year}-${month}-${day}`
 }
 
-export {employees}
+const transformDateToRawData = (date: string): string => {
+  //Not the best way to do it but the faster I can implement now
+  const [year, month, day] = date.split('-');
+  return `${month}/${day}/${year}`
+}
+
+const add = async (employee: Omit<Employee, 'id'>): Promise<string> => {
+  const newEmployee = {...employee, id: (await employees()).length + 1};
+  const newValue = `${newEmployee.id},${newEmployee.name},${newEmployee.surname},"${newEmployee.address}",${newEmployee.phone},${newEmployee.email},${transformDateToRawData(newEmployee.birthdate)}`
+  data += `\n${newValue}`;
+  return Promise.resolve(newEmployee.id?.toString());
+}
+
+//Just for testing purposes. I wouldn't do this in a real project
+const reset = (): void => {
+  data = initData;
+}
+
+export {employees, add, reset}

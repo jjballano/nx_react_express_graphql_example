@@ -1,7 +1,13 @@
 import {server} from './main';
 import {gql} from 'apollo-server-express';
+import { reset } from '@jjballano/data/employee'
+
 
 describe('Employees API', () => {
+
+  afterEach(() => 
+    reset()
+  )
   it('returns the list of employees', async () => {
     const employees = (await server.executeOperation({
       query: gql`
@@ -37,5 +43,41 @@ describe('Employees API', () => {
       id: '7',
       name: 'Ruth',
     });
+  });
+
+  it('adds new employee', async () => {
+    await server.executeOperation({
+      query: gql`
+      mutation CreateEmployee {
+        create(employee: {
+          name: "Carlos"
+          surname: "García"
+          address: "Paseo Castellana"
+          birthdate: "12/22/1985"
+          phone: "123456789"
+          email: "the@email.com"
+        })
+      }
+      `
+    });
+
+    //I'd go to check to the database directly in a real scenario
+    const employees = (await server.executeOperation({
+      query: gql`
+        query Employees {
+          list {
+            name
+            surname
+          }
+        }
+      `
+    })).data.list as unknown[];
+    
+    expect(employees).toHaveLength(31);
+
+    expect(employees[employees.length - 1]).toEqual({
+      name: "Carlos",
+      surname: "García"
+    })
   });
 })
