@@ -96,24 +96,24 @@
         }
       }
     },
-    "nx-example": {
-      "root": "apps/nx-example",
-      "sourceRoot": "apps/nx-example/src",
+    "front": {
+      "root": "apps/front",
+      "sourceRoot": "apps/front/src",
       "projectType": "application",
       "targets": {
         "build": {
           "executor": "@nrwl/web:build",
           "outputs": ["{options.outputPath}"],
           "options": {
-            "outputPath": "dist/apps/nx-example",
-            "index": "apps/nx-example/src/index.html",
+            "outputPath": "dist/apps/front",
+            "index": "apps/front/src/index.html",
             "baseHref": "/",
-            "main": "apps/nx-example/src/main.tsx",
-            "polyfills": "apps/nx-example/src/polyfills.ts",
-            "tsConfig": "apps/nx-example/tsconfig.app.json",
+            "main": "apps/front/src/main.tsx",
+            "polyfills": "apps/front/src/polyfills.ts",
+            "tsConfig": "apps/front/tsconfig.app.json",
             "assets": [
-              "apps/nx-example/src/favicon.ico",
-              "apps/nx-example/src/assets"
+              "apps/front/src/favicon.ico",
+              "apps/front/src/assets"
             ],
             "styles": [],
             "scripts": [],
@@ -123,8 +123,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "apps/nx-example/src/environments/environment.ts",
-                  "with": "apps/nx-example/src/environments/environment.prod.ts"
+                  "replace": "apps/front/src/environments/environment.ts",
+                  "with": "apps/front/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -147,12 +147,12 @@
         "serve": {
           "executor": "@nrwl/web:dev-server",
           "options": {
-            "buildTarget": "nx-example:build",
+            "buildTarget": "front:build",
             "hmr": true
           },
           "configurations": {
             "production": {
-              "buildTarget": "nx-example:build:production",
+              "buildTarget": "front:build:production",
               "hmr": false
             }
           }
@@ -161,34 +161,34 @@
           "executor": "@nrwl/linter:eslint",
           "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": ["apps/nx-example/**/*.{ts,tsx,js,jsx}"]
+            "lintFilePatterns": ["apps/front/**/*.{ts,tsx,js,jsx}"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/nx-example"],
+          "outputs": ["coverage/apps/front"],
           "options": {
-            "jestConfig": "apps/nx-example/jest.config.js",
+            "jestConfig": "apps/front/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
-    "nx-example-e2e": {
-      "root": "apps/nx-example-e2e",
-      "sourceRoot": "apps/nx-example-e2e/src",
+    "front-e2e": {
+      "root": "apps/front-e2e",
+      "sourceRoot": "apps/front-e2e/src",
       "projectType": "application",
       "targets": {
         "e2e": {
           "executor": "@nrwl/cypress:cypress",
           "options": {
-            "cypressConfig": "apps/nx-example-e2e/cypress.json",
-            "devServerTarget": "nx-example:serve",
-            "tsConfig": "apps/nx-example-e2e/tsconfig.json"
+            "cypressConfig": "apps/front-e2e/cypress.json",
+            "devServerTarget": "front:serve",
+            "tsConfig": "apps/front-e2e/tsconfig.json"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "nx-example:serve:production"
+              "devServerTarget": "front:serve:production"
             }
           }
         },
@@ -196,7 +196,7 @@
           "executor": "@nrwl/linter:eslint",
           "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": ["apps/nx-example-e2e/**/*.{js,ts}"]
+            "lintFilePatterns": ["apps/front-e2e/**/*.{js,ts}"]
           }
         }
       }
@@ -221,5 +221,5 @@
       }
     }
   },
-  "defaultProject": "nx-example"
+  "defaultProject": "front"
 }

@@ -36,12 +36,12 @@
     "data": {
       "tags": []
     },
-    "nx-example": {
+    "front": {
       "tags": []
     },
-    "nx-example-e2e": {
+    "front-e2e": {
       "tags": [],
-      "implicitDependencies": ["nx-example"]
+      "implicitDependencies": ["front"]
     }
   }
 }

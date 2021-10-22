@@ -1,10 +1,11 @@
 module.exports = {
-  displayName: 'nx-example',
+  displayName: 'front',
   preset: '../../jest.preset.js',
   transform: {
     '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nrwl/react/plugins/jest',
     '^.+\\.[tj]sx?$': 'babel-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/apps/nx-example',
+  coverageDirectory: '../../coverage/apps/front',
+  setupFilesAfterEnv: ['./jest.setup.ts', './src/mocks/server.ts']
 };

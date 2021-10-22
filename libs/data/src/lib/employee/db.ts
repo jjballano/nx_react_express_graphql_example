@@ -47,7 +47,6 @@ export type Employee = {
 }
 
 const employees = (offset: number, limit: number, sortBy = 'id'): Promise<Employee[]> => {
-  console.log({sortBy, limit})
   const list = data.split('\n').splice(1);
   const max = limit > 0 ? limit : list.length + 1;
   
