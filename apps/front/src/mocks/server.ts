@@ -14,14 +14,17 @@ afterAll(() => server.close());
 type HandlerMockConfiguration = {
   name: string;
   response: Record<string, unknown>;
+  getPayload?: (json: HandlerMockConfiguration['response']) => void;
 };
 
 export const mockServerHandler = ({
   name,
   response,
+  getPayload,
 }: HandlerMockConfiguration) => {
   server.use(
-    graphql.query(name, (req, res, ctx) => {
+    graphql.query(name, ({body}, res, ctx) => {
+      getPayload?.(typeof body === 'string' ? JSON.parse(body) : body);
       return res(
         ctx.data(response)
       )
