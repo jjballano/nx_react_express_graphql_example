@@ -16,7 +16,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@jjballano/api-types": ["libs/api-types/src/index.ts"],
       "@jjballano/data": ["libs/data/src/index.ts"],
       "@jjballano/data/employee": ["libs/data/src/lib/employee/index.ts"]
     }
